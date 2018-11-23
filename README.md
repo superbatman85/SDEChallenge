@@ -22,3 +22,23 @@ We need to provide Google Analytic like services to our customers. Please provid
 3. Provide metrics to customers with at most one hour delay.
 4. Run with minimum downtime.
 5. Have the ability to reprocess historical data in case of bugs in the processing logic.
+
+
+
+We need to store: IP (15 chars), geographical location (eg. 35.96689,-95.929945: 22 chars), duration (YYYYMMDD hh:mm:ss - start & end: 32 chars), URL (100 chars), userID (32 chars) - total ~ 200 chars
+Assume 10 billion write events per day.
+200 & 10 bil = 2 trillion ~ 4 terabytes if assuming 2 bytes (16 bits) per char (no compression) per day
+Hard-drives - usd SSD to provide better parameters than disks.
+
+Relational DB - Postgres. Regularly index tables for faster write/retrieval. Shard DB to spread data across different machines to help writing data. 
+Caching solution - use memcached. Saves lot of reads directly from DB. Faster & efficient way to provide metrics to customers - even real-time.
+Load-balancing - PgBouncer. 
+Reshard - could take down the server (using repmgr takes ~30 seconds of downtime)
+
+
+
+relational DB - Postgres
+big data platform - Hadoop with Mahout machine learning library
+data format - binary format (GRID/NetCDF/HDF)
+search platform - Solr: distributed and real-time indexing, load-balanced querying, automated failover and recovery, centralized configuration, dynamic clustering
+storage - NAS: independent scaling of compute and storage resources.
